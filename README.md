@@ -569,18 +569,18 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 If you use this system in your research, please cite:
 
 ```
-Islamabad Smog Detection System (2024)
+Islamabad Smog Detection System (2025)
 Satellite-based air pollution monitoring and analysis for Islamabad, Pakistan
-GitHub Repository: https://github.com/your-username/smog-detection
+GitHub Repository: https://github.com/TH3SOLO1ST/smog-detection
 ```
 
 ## Contact
 
 For questions, issues, or contributions:
 
-- GitHub Issues: https://github.com/your-username/smog-detection/issues
-- Email: [your-email@domain.com]
-- Project Lead: [maintainer-email@domain.com]
+- GitHub Issues: https://github.com/TH3SOLO1ST/smog-detection/issues
+- Email: [excel3227@gmail.com]
+- Project Lead: [excel3227@gmail.com]
 
 ---
 
