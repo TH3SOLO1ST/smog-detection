@@ -1,0 +1,208 @@
+# Islamabad Smog Detection System Configuration
+# Environment variables can be used with ${VAR_NAME} syntax
+
+# API Credentials and Endpoints
+apis:
+  copernicus:
+    client_id: "${COPERNICUS_CLIENT_ID}"
+    client_secret: "${COPERNICUS_CLIENT_SECRET}"
+    base_url: "https://dataspace.copernicus.eu"
+    auth_url: "https://identity.dataspace.copernicus.eu/auth/realms/CDSE/protocol/openid-connect/token"
+
+  nasa:
+    earthdata_username: "${NASA_EARTHDATA_USERNAME}"
+    earthdata_password: "${NASA_EARTHDATA_PASSWORD}"
+    firms_api_url: "https://firms.modaps.eosdis.nasa.gov/api/area/json"
+
+  google_earth_engine:
+    project_id: "${GEE_PROJECT_ID}"
+    service_account_key: "${GEE_SERVICE_ACCOUNT_KEY}"
+    max_pixels: 1e10
+
+  openweather:
+    api_key: "${OPENWEATHER_API_KEY}"
+    base_url: "https://api.openweathermap.org/data/2.5"
+
+# Islamabad Region Configuration
+region:
+  name: "Islamabad"
+  center_lat: 33.6844
+  center_lon: 73.0479
+  buffer_km: 50
+  bounding_box:
+    north: 34.1844
+    south: 33.1844
+    east: 73.9479
+    west: 72.1479
+  utm_zone: 43  # UTM Zone for Pakistan
+
+# Data Sources Configuration
+data_sources:
+  sentinel5p:
+    collections:
+      no2: "COPERNICUS/S5P/OFFL/L3_NO2"
+      so2: "COPERNICUS/S5P/OFFL/L3_SO2"
+      co: "COPERNICUS/S5P/OFFL/L3_CO"
+      o3: "COPERNICUS/S5P/OFFL/L3_O3"
+      aerosol: "COPERNICUS/S5P/OFFL/L3_AER_AI"
+    spatial_resolution: 7000  # meters
+    temporal_resolution: "daily"
+
+  modis:
+    products:
+      mod04_l2: "MODIS/061/MOD04_L2"  # Terra aerosol
+      myd04_l2: "MODIS/061/MYD04_L2"  # Aqua aerosol
+      mod08_m3: "MODIS/061/MOD08_M3"  # Monthly atmospheric
+      mod13q1: "MODIS/061/MOD13Q1"    # Vegetation indices
+    country_code: "PER"  # Pakistan country code
+    spatial_resolution: 1000  # meters (1km)
+    temporal_resolution: "daily"
+
+  google_earth_engine:
+    collections:
+      landsat8: "LANDSAT/LC08/C02/T1_L2"
+      sentinel2: "COPERNICUS/S2_SR_HARMONIZED"
+      dem: "USGS/SRTMGL1_003"
+
+# Processing Parameters
+processing:
+  atmospheric_correction:
+    method: "DOS"  # Dark Object Subtraction
+    dark_object_percentile: 1
+    haze_correction: true
+    color_balance: true
+
+  noise_reduction:
+    gaussian_kernel: 3
+    median_filter_size: 3
+    bilateral_d: 9
+    bilateral_sigma_color: 75
+    bilateral_sigma_space: 75
+
+  contrast_enhancement:
+    clahe_clip_limit: 2.0
+    clahe_grid_size: 8
+    gamma_correction: 1.2
+    histogram_equalization: true
+
+  quality_thresholds:
+    cloud_cover_max: 20  # percentage
+    data_quality_min: 0.7  # quality flag threshold
+    ndvi_min: 0.2  # minimum NDVI for vegetation masking
+
+# Time Series Analysis
+time_series:
+  aggregation:
+    daily: true
+    weekly: true
+    monthly: true
+    seasonal: true
+
+  gap_filling:
+    max_gap_days: 3
+    interpolation_method: "linear"
+    outlier_detection: true
+    outlier_threshold: 3.0  # standard deviations
+
+  trend_analysis:
+    window_size: 30  # days
+    smoothing_method: "savgol"
+    polynomial_order: 3
+
+# Machine Learning Pipeline
+ml_pipeline:
+  features:
+    lag_features: [1, 3, 7, 14]  # days
+    rolling_windows: [7, 14, 30]  # days
+    temporal_features: ["day_of_year", "month", "season"]
+    spatial_features: ["elevation", "distance_to_center", "land_use"]
+
+  data_split:
+    train_ratio: 0.7
+    validation_ratio: 0.15
+    test_ratio: 0.15
+    temporal_split: true
+
+  scaling:
+    method: "standard"  # standard, minmax, robust
+    log_transform_pollutants: true
+
+# Visualization Configuration
+visualization:
+  maps:
+    default_center: [33.6844, 73.0479]  # Islamabad coordinates
+    default_zoom: 10
+    color_schemes:
+      no2: "YlOrRd"
+      so2: "PuRd"
+      co: "Oranges"
+      o3: "BuPu"
+      aod: "Greys"
+
+  charts:
+    figure_size: [12, 8]
+    dpi: 300
+    style: "seaborn-v0_8"
+
+  dashboard:
+    auto_refresh_interval: 3600  # seconds
+    export_formats: ["html", "pdf", "png"]
+
+# Data Storage Configuration
+storage:
+  base_path: "data"
+  raw_data: "data/raw"
+  processed_data: "data/processed"
+  exports: "data/exports"
+
+  compression:
+    enabled: true
+    format: "gzip"
+    level: 6
+
+  backup:
+    enabled: true
+    interval: "daily"
+    retention_days: 30
+
+# Logging Configuration
+logging:
+  level: "INFO"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file: "logs/smog_detection.log"
+  max_size: "10MB"
+  backup_count: 5
+
+# Performance and Parallelization
+performance:
+  parallel_processing: true
+  max_workers: 4
+  chunk_size: 1000
+  memory_limit: "8GB"
+
+  dask:
+    enabled: true
+    scheduler: "threads"
+    num_workers: 4
+
+# Monitoring and Alerts
+monitoring:
+  alerts:
+    enabled: true
+    smtp_server: "${SMTP_SERVER}"
+    smtp_port: 587
+    smtp_username: "${SMTP_USERNAME}"
+    smtp_password: "${SMTP_PASSWORD}"
+    recipients: ["admin@example.com"]
+
+  thresholds:
+    no2_alert: 40  # ug/m3
+    aod_alert: 1.0
+    so2_alert: 20  # ug/m3
+
+# Development and Testing
+development:
+  debug: false
+  test_mode: false
+  mock_api_calls: false
+  sample_data_size: 100  # for testing
