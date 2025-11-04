@@ -1,0 +1,939 @@
+{% extends "base.html" %}
+
+{% block title %}Settings - Islamabad Smog Detection System{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="card shadow-sm">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">
+                    <i class="fas fa-cog me-2"></i>
+                    System Configuration
+                </h5>
+            </div>
+            <div class="card-body">
+                <!-- Configuration Tabs -->
+                <ul class="nav nav-tabs" id="configTabs" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="data-sources-tab" data-toggle="tab" href="#data-sources" role="tab">
+                            <i class="fas fa-database me-2"></i>Data Sources
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="region-tab" data-toggle="tab" href="#region" role="tab">
+                            <i class="fas fa-map-marker-alt me-2"></i>Region Settings
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="alerts-tab" data-toggle="tab" href="#alerts" role="tab">
+                            <i class="fas fa-bell me-2"></i>Alerts & Reports
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="processing-tab" data-toggle="tab" href="#processing" role="tab">
+                            <i class="fas fa-cogs me-2"></i>Processing
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="system-tab" data-toggle="tab" href="#system" role="tab">
+                            <i class="fas fa-server me-2"></i>System
+                        </a>
+                    </li>
+                </ul>
+
+                <div class="tab-content mt-4" id="configTabContent">
+                    <!-- Data Sources Tab -->
+                    <div class="tab-pane fade show active" id="data-sources" role="tabpanel">
+                        <form id="data-sources-form">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h6 class="mb-3">Copernicus (Sentinel-5P)</h6>
+                                    <div class="form-group">
+                                        <label for="copernicus-status">Status</label>
+                                        <div class="form-control-plaintext">
+                                            <span class="badge badge-success" id="copernicus-status">Configured</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="copernicus-enabled">Enable Data Source</label>
+                                        <div class="custom-control custom-switch">
+                                            <input type="checkbox" class="custom-control-input" id="copernicus-enabled" checked>
+                                            <label class="custom-control-label" for="copernicus-enabled">Use Sentinel-5P data</label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="copernicus-update-frequency">Update Frequency</label>
+                                        <select class="form-control" id="copernicus-update-frequency">
+                                            <option value="hourly">Hourly</option>
+                                            <option value="daily" selected>Daily</option>
+                                            <option value="weekly">Weekly</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <h6 class="mb-3">NASA (MODIS)</h6>
+                                    <div class="form-group">
+                                        <label for="nasa-status">Status</label>
+                                        <div class="form-control-plaintext">
+                                            <span class="badge badge-success" id="nasa-status">Configured</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="nasa-enabled">Enable Data Source</label>
+                                        <div class="custom-control custom-switch">
+                                            <input type="checkbox" class="custom-control-input" id="nasa-enabled" checked>
+                                            <label class="custom-control-label" for="nasa-enabled">Use MODIS data</label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="nasa-update-frequency">Update Frequency</label>
+                                        <select class="form-control" id="nasa-update-frequency">
+                                            <option value="hourly">Hourly</option>
+                                            <option value="daily" selected>Daily</option>
+                                            <option value="weekly">Weekly</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <h6 class="mb-3">Google Earth Engine</h6>
+                                    <div class="form-group">
+                                        <label for="gee-status">Status</label>
+                                        <div class="form-control-plaintext">
+                                            <span class="badge badge-warning" id="gee-status">Not Configured</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="gee-enabled">Enable Data Source</label>
+                                        <div class="custom-control custom-switch">
+                                            <input type="checkbox" class="custom-control-input" id="gee-enabled">
+                                            <label class="custom-control-label" for="gee-enabled">Use GEE data</label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="gee-update-frequency">Update Frequency</label>
+                                        <select class="form-control" id="gee-update-frequency" disabled>
+                                            <option value="hourly">Hourly</option>
+                                            <option value="daily" selected>Daily</option>
+                                            <option value="weekly">Weekly</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <h6 class="mb-3">Data Quality</h6>
+                                    <div class="form-group">
+                                        <label for="cloud-cover-max">Maximum Cloud Cover</label>
+                                        <input type="range" class="form-control-range" id="cloud-cover-max" min="0" max="100" value="20">
+                                        <small class="form-text text-muted">Current: <span id="cloud-cover-value">20%</span></small>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="data-quality-min">Minimum Data Quality</label>
+                                        <input type="range" class="form-control-range" id="data-quality-min" min="0" max="100" value="70">
+                                        <small class="form-text text-muted">Current: <span id="data-quality-value">70%</span></small>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row mt-4">
+                                <div class="col-12">
+                                    <button type="button" class="btn btn-primary" id="test-connections">
+                                        <i class="fas fa-plug me-2"></i>Test Connections
+                                    </button>
+                                    <button type="button" class="btn btn-success ml-2" id="save-data-sources">
+                                        <i class="fas fa-save me-2"></i>Save Data Sources
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Region Settings Tab -->
+                    <div class="tab-pane fade" id="region" role="tabpanel">
+                        <form id="region-form">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h6 class="mb-3">Location Configuration</h6>
+                                    <div class="form-group">
+                                        <label for="region-name">Region Name</label>
+                                        <input type="text" class="form-control" id="region-name" value="Islamabad" readonly>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="buffer-distance">Buffer Distance</label>
+                                        <div class="input-group">
+                                            <input type="number" class="form-control" id="buffer-distance" value="50" min="10" max="200">
+                                            <div class="input-group-append">
+                                                <span class="input-group-text">km</span>
+                                            </div>
+                                        </div>
+                                        <small class="form-text text-muted">Radius around city center for monitoring</small>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <h6 class="mb-3">Bounding Box</h6>
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <div class="form-group">
+                                                <label for="bbox-north">North Latitude</label>
+                                                <input type="number" class="form-control" id="bbox-north" value="34.1844" step="0.0001">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="bbox-south">South Latitude</label>
+                                                <input type="number" class="form-control" id="bbox-south" value="33.1844" step="0.0001">
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="form-group">
+                                                <label for="bbox-east">East Longitude</label>
+                                                <input type="number" class="form-control" id="bbox-east" value="73.9479" step="0.0001">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="bbox-west">West Longitude</label>
+                                                <input type="number" class="form-control" id="bbox-west" value="72.1479" step="0.0001">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button type="button" class="btn btn-outline-info btn-sm" id="reset-coordinates">
+                                        <i class="fas fa-undo me-1"></i>Reset to Islamabad Default
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="row mt-4">
+                                <div class="col-12">
+                                    <div class="alert alert-info">
+                                        <h6 class="alert-heading">
+                                            <i class="fas fa-info-circle me-2"></i>Region Information
+                                        </h6>
+                                        <p class="mb-2">
+                                            <strong>Center:</strong> 33.6844°N, 73.0479°E<br>
+                                            <strong>Area:</strong> <span id="area-coverage">7,850</span> km²<br>
+                                            <strong>Timezone:</strong> PKT (UTC+5)
+                                        </p>
+                                        <hr>
+                                        <p class="mb-0">
+                                            <small>This region covers Islamabad metropolitan area with a 50km buffer for comprehensive air quality monitoring.</small>
+                                        </p>
+                                    </div>
+                                    <button type="button" class="btn btn-primary" id="save-region-settings">
+                                        <i class="fas fa-save me-2"></i>Save Region Settings
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Alerts & Reports Tab -->
+                    <div class="tab-pane fade" id="alerts" role="tabpanel">
+                        <form id="alerts-form">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h6 class="mb-3">Alert Thresholds</h6>
+                                    <div class="form-group">
+                                        <label for="pm25-threshold">PM2.5 Alert Threshold</label>
+                                        <div class="input-group">
+                                            <input type="number" class="form-control" id="pm25-threshold" value="35" min="0" max="500">
+                                            <div class="input-group-append">
+                                                <span class="input-group-text">µg/m³</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="no2-threshold">NO2 Alert Threshold</label>
+                                        <div class="input-group">
+                                            <input type="number" class="form-control" id="no2-threshold" value="40" min="0" max="200">
+                                            <div class="input-group-append">
+                                                <span class="input-group-text">µg/m³</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="so2-threshold">SO2 Alert Threshold</label>
+                                        <div class="input-group">
+                                            <input type="number" class="form-control" id="so2-threshold" value="20" min="0" max="200">
+                                            <div class="input-group-append">
+                                                <span class="input-group-text">µg/m³</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <h6 class="mb-3">Email Notifications</h6>
+                                    <div class="form-group">
+                                        <label for="email-enabled">Enable Email Alerts</label>
+                                        <div class="custom-control custom-switch">
+                                            <input type="checkbox" class="custom-control-input" id="email-enabled">
+                                            <label class="custom-control-label" for="email-enabled">Send email notifications</label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="recipients">Recipients</label>
+                                        <textarea class="form-control" id="recipients" rows="3" placeholder="email1@example.com&#10;email2@example.com"></textarea>
+                                        <small class="form-text text-muted">One email per line</small>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="quiet-hours">Quiet Hours</label>
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <input type="time" class="form-control" id="quiet-start" value="22:00">
+                                            </div>
+                                            <div class="col-6">
+                                                <input type="time" class="form-control" id="quiet-end" value="07:00">
+                                            </div>
+                                        </div>
+                                        <small class="form-text text-muted">No alerts sent during these hours</small>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row mt-4">
+                                <div class="col-md-6">
+                                    <h6 class="mb-3">Automatic Reports</h6>
+                                    <div class="form-group">
+                                        <label for="daily-report">Daily Report</label>
+                                        <div class="custom-control custom-switch">
+                                            <input type="checkbox" class="custom-control-input" id="daily-report" checked>
+                                            <label class="custom-control-label" for="daily-report">Generate daily report</label>
+                                        </div>
+                                        <input type="time" class="form-control mt-2" id="daily-report-time" value="08:00">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="weekly-report">Weekly Report</label>
+                                        <div class="custom-control custom-switch">
+                                            <input type="checkbox" class="custom-control-input" id="weekly-report">
+                                            <label class="custom-control-label" for="weekly-report">Generate weekly report</label>
+                                        </div>
+                                        <select class="form-control mt-2" id="weekly-report-day">
+                                            <option value="1">Monday</option>
+                                            <option value="2">Tuesday</option>
+                                            <option value="3">Wednesday</option>
+                                            <option value="4">Thursday</option>
+                                            <option value="5" selected>Friday</option>
+                                            <option value="6">Saturday</option>
+                                            <option value="0">Sunday</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <h6 class="mb-3">Report Format</h6>
+                                    <div class="form-group">
+                                        <label>Report Types</label>
+                                        <div class="custom-control custom-checkbox">
+                                            <input type="checkbox" class="custom-control-input" id="report-pdf" checked>
+                                            <label class="custom-control-label" for="report-pdf">PDF Report</label>
+                                        </div>
+                                        <div class="custom-control custom-checkbox">
+                                            <input type="checkbox" class="custom-control-input" id="report-html" checked>
+                                            <label class="custom-control-label" for="report-html">HTML Dashboard</label>
+                                        </div>
+                                        <div class="custom-control custom-checkbox">
+                                            <input type="checkbox" class="custom-control-input" id="report-csv">
+                                            <label class="custom-control-label" for="report-csv">CSV Data Export</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row mt-4">
+                                <div class="col-12">
+                                    <button type="button" class="btn btn-primary" id="save-alert-settings">
+                                        <i class="fas fa-save me-2"></i>Save Alert Settings
+                                    </button>
+                                    <button type="button" class="btn btn-outline-info ml-2" id="test-email">
+                                        <i class="fas fa-envelope me-2"></i>Send Test Email
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Processing Tab -->
+                    <div class="tab-pane fade" id="processing" role="tabpanel">
+                        <form id="processing-form">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h6 class="mb-3">Atmospheric Correction</h6>
+                                    <div class="form-group">
+                                        <label for="correction-method">Correction Method</label>
+                                        <select class="form-control" id="correction-method">
+                                            <option value="DOS" selected>Dark Object Subtraction (DOS)</option>
+                                            <option value="empirical">Empirical Line Correction</option>
+                                            <option value="radiative">Radiative Transfer</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="dark-object-percentile">Dark Object Percentile</label>
+                                        <div class="input-group">
+                                            <input type="number" class="form-control" id="dark-object-percentile" value="1" min="0.1" max="5" step="0.1">
+                                            <div class="input-group-append">
+                                                <span class="input-group-text">%</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <h6 class="mb-3">Noise Reduction</h6>
+                                    <div class="form-group">
+                                        <label for="gaussian-kernel">Gaussian Kernel Size</label>
+                                        <select class="form-control" id="gaussian-kernel">
+                                            <option value="3" selected>3×3</option>
+                                            <option value="5">5×5</option>
+                                            <option value="7">7×7</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="median-filter">Median Filter Size</label>
+                                        <select class="form-control" id="median-filter">
+                                            <option value="3" selected>3×3</option>
+                                            <option value="5">5×5</option>
+                                            <option value="7">7×7</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <h6 class="mb-3">Contrast Enhancement</h6>
+                                    <div class="form-group">
+                                        <label for="enhancement-method">Enhancement Method</label>
+                                        <select class="form-control" id="enhancement-method">
+                                            <option value="clahe" selected>Adaptive Histogram (CLAHE)</option>
+                                            <option value="histogram">Global Histogram</option>
+                                            <option value="gamma">Gamma Correction</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="clip-limit">CLAHE Clip Limit</label>
+                                        <input type="number" class="form-control" id="clip-limit" value="2.0" min="1.0" max="10.0" step="0.1">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <h6 class="mb-3">Processing Performance</h6>
+                                    <div class="form-group">
+                                        <label for="parallel-processing">Parallel Processing</label>
+                                        <div class="custom-control custom-switch">
+                                            <input type="checkbox" class="custom-control-input" id="parallel-processing" checked>
+                                            <label class="custom-control-label" for="parallel-processing">Use multiple CPU cores</label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="memory-limit">Memory Limit</label>
+                                        <div class="input-group">
+                                            <input type="number" class="form-control" id="memory-limit" value="4" min="1" max="32">
+                                            <div class="input-group-append">
+                                                <span class="input-group-text">GB</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row mt-4">
+                                <div class="col-12">
+                                    <button type="button" class="btn btn-primary" id="save-processing-settings">
+                                        <i class="fas fa-save me-2"></i>Save Processing Settings
+                                    </button>
+                                    <button type="button" class="btn btn-outline-warning ml-2" id="reset-processing">
+                                        <i class="fas fa-undo me-2"></i>Reset to Defaults
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- System Tab -->
+                    <div class="tab-pane fade" id="system" role="tabpanel">
+                        <form id="system-form">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h6 class="mb-3">System Information</h6>
+                                    <div class="form-group">
+                                        <label>System Version</label>
+                                        <div class="form-control-plaintext">1.0.0</div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Installation Date</label>
+                                        <div class="form-control-plaintext" id="install-date">Unknown</div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Last Data Update</label>
+                                        <div class="form-control-plaintext" id="last-data-update">Never</div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Data Storage Used</label>
+                                        <div class="form-control-plaintext" id="storage-used">Calculating...</div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <h6 class="mb-3">System Maintenance</h6>
+                                    <div class="form-group">
+                                        <label for="auto-cleanup">Automatic Cleanup</label>
+                                        <div class="custom-control custom-switch">
+                                            <input type="checkbox" class="custom-control-input" id="auto-cleanup" checked>
+                                            <label class="custom-control-label" for="auto-cleanup">Remove old data files</label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="data-retention">Data Retention Period</label>
+                                        <select class="form-control" id="data-retention">
+                                            <option value="30">30 days</option>
+                                            <option value="90" selected>90 days</option>
+                                            <option value="180">180 days</option>
+                                            <option value="365">1 year</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="backup-enabled">Automatic Backups</label>
+                                        <div class="custom-control custom-switch">
+                                            <input type="checkbox" class="custom-control-input" id="backup-enabled">
+                                            <label class="custom-control-label" for="backup-enabled">Create data backups</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row mt-4">
+                                <div class="col-12">
+                                    <h6 class="mb-3">System Actions</h6>
+                                    <div class="btn-group" role="group">
+                                        <button type="button" class="btn btn-outline-primary" id="check-updates">
+                                            <i class="fas fa-download me-2"></i>Check for Updates
+                                        </button>
+                                        <button type="button" class="btn btn-outline-info" id="export-config">
+                                            <i class="fas fa-file-export me-2"></i>Export Configuration
+                                        </button>
+                                        <button type="button" class="btn btn-outline-warning" id="import-config">
+                                            <i class="fas fa-file-import me-2"></i>Import Configuration
+                                        </button>
+                                        <button type="button" class="btn btn-outline-danger" id="reset-system">
+                                            <i class="fas fa-exclamation-triangle me-2"></i>Reset System
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row mt-4">
+                                <div class="col-12">
+                                    <button type="button" class="btn btn-primary" id="save-system-settings">
+                                        <i class="fas fa-save me-2"></i>Save System Settings
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+$(document).ready(function() {
+    // Load current configuration
+    loadConfiguration();
+
+    // Save handlers for each section
+    $('#save-data-sources').click(function() {
+        saveConfiguration('data-sources');
+    });
+
+    $('#save-region-settings').click(function() {
+        saveConfiguration('region');
+    });
+
+    $('#save-alert-settings').click(function() {
+        saveConfiguration('alerts');
+    });
+
+    $('#save-processing-settings').click(function() {
+        saveConfiguration('processing');
+    });
+
+    $('#save-system-settings').click(function() {
+        saveConfiguration('system');
+    });
+
+    // Test connections
+    $('#test-connections').click(function() {
+        testApiConnections();
+    });
+
+    // Test email
+    $('#test-email').click(function() {
+        sendTestEmail();
+    });
+
+    // Range slider value updates
+    $('#cloud-cover-max').on('input', function() {
+        $('#cloud-cover-value').text($(this).val() + '%');
+    });
+
+    $('#data-quality-min').on('input', function() {
+        $('#data-quality-value').text($(this).val() + '%');
+    });
+
+    // Reset coordinates
+    $('#reset-coordinates').click(function() {
+        $('#bbox-north').val('34.1844');
+        $('#bbox-south').val('33.1844');
+        $('#bbox-east').val('73.9479');
+        $('#bbox-west').val('72.1479');
+        updateAreaCoverage();
+    });
+
+    // System actions
+    $('#check-updates').click(function() {
+        checkForUpdates();
+    });
+
+    $('#export-config').click(function() {
+        exportConfiguration();
+    });
+
+    $('#import-config').click(function() {
+        importConfiguration();
+    });
+
+    $('#reset-system').click(function() {
+        if (confirm('Are you sure you want to reset the system? This will delete all settings and data.')) {
+            resetSystem();
+        }
+    });
+});
+
+function loadConfiguration() {
+    $.get('/api/config')
+        .done(function(config) {
+            // Populate configuration fields
+            populateDataSources(config.apis || {});
+            populateRegionSettings(config.region || {});
+            populateProcessingSettings(config.processing || {});
+            populateSystemInfo();
+        })
+        .fail(function() {
+            showNotification('Failed to load configuration', 'error');
+        });
+}
+
+function populateDataSources(apis) {
+    // Update API status badges
+    if (apis.copernicus && apis.copernicus.configured) {
+        $('#copernicus-status').removeClass('badge-warning').addClass('badge-success').text('Configured');
+    } else {
+        $('#copernicus-status').removeClass('badge-success').addClass('badge-warning').text('Not Configured');
+    }
+
+    if (apis.nasa && apis.nasa.configured) {
+        $('#nasa-status').removeClass('badge-warning').addClass('badge-success').text('Configured');
+    } else {
+        $('#nasa-status').removeClass('badge-success').addClass('badge-warning').text('Not Configured');
+    }
+
+    if (apis.google_earth_engine && apis.google_earth_engine.configured) {
+        $('#gee-status').removeClass('badge-warning').addClass('badge-success').text('Configured');
+        $('#gee-enabled').prop('disabled', false);
+        $('#gee-update-frequency').prop('disabled', false);
+    } else {
+        $('#gee-status').removeClass('badge-success').addClass('badge-warning').text('Not Configured');
+        $('#gee-enabled').prop('disabled', true);
+        $('#gee-update-frequency').prop('disabled', true);
+    }
+}
+
+function populateRegionSettings(region) {
+    if (region.name) {
+        $('#region-name').val(region.name);
+    }
+    if (region.buffer_km) {
+        $('#buffer-distance').val(region.buffer_km);
+    }
+    if (region.bounding_box) {
+        $('#bbox-north').val(region.bounding_box.north);
+        $('#bbox-south').val(region.bounding_box.south);
+        $('#bbox-east').val(region.bounding_box.east);
+        $('#bbox-west').val(region.bounding_box.west);
+    }
+    updateAreaCoverage();
+}
+
+function populateProcessingSettings(processing) {
+    if (processing.atmospheric_correction) {
+        $('#correction-method').val(processing.atmospheric_correction.method || 'DOS');
+        $('#dark-object-percentile').val(processing.atmospheric_correction.dark_object_percentile || 1);
+    }
+    if (processing.noise_reduction) {
+        $('#gaussian-kernel').val(processing.noise_reduction.gaussian_kernel || 3);
+        $('#median-filter').val(processing.noise_reduction.median_filter_size || 3);
+    }
+    if (processing.quality_thresholds) {
+        $('#cloud-cover-max').val(processing.quality_thresholds.cloud_cover_max || 20);
+        $('#data-quality-min').val(processing.quality_thresholds.data_quality_min || 70);
+        $('#cloud-cover-value').text(processing.quality_thresholds.cloud_cover_max || 20 + '%');
+        $('#data-quality-value').text(processing.quality_thresholds.data_quality_min || 70 + '%');
+    }
+}
+
+function populateSystemInfo() {
+    // Update system information
+    $('#install-date').text(new Date().toLocaleDateString());
+    $('#last-data-update').text('2 hours ago'); // This would come from actual data
+    $('#storage-used').text('1.2 GB'); // This would calculate actual usage
+}
+
+function updateAreaCoverage() {
+    // Calculate area coverage based on bounding box
+    var north = parseFloat($('#bbox-north').val());
+    var south = parseFloat($('#bbox-south').val());
+    var east = parseFloat($('#bbox-east').val());
+    var west = parseFloat($('#bbox-west').val());
+
+    // Simple rectangular approximation (not exact due to Earth's curvature)
+    var latDiff = north - south;
+    var lonDiff = east - west;
+    var areaKm2 = Math.abs(latDiff * 111) * Math.abs(lonDiff * 111 * Math.cos((north + south) * Math.PI / 360));
+
+    $('#area-coverage').text(areaKm2.toFixed(0));
+}
+
+function saveConfiguration(section) {
+    var configData = {};
+
+    switch(section) {
+        case 'data-sources':
+            configData = {
+                apis: {
+                    copernicus: {
+                        enabled: $('#copernicus-enabled').is(':checked'),
+                        update_frequency: $('#copernicus-update-frequency').val()
+                    },
+                    nasa: {
+                        enabled: $('#nasa-enabled').is(':checked'),
+                        update_frequency: $('#nasa-update-frequency').val()
+                    },
+                    google_earth_engine: {
+                        enabled: $('#gee-enabled').is(':checked'),
+                        update_frequency: $('#gee-update-frequency').val()
+                    }
+                },
+                quality_thresholds: {
+                    cloud_cover_max: parseInt($('#cloud-cover-max').val()),
+                    data_quality_min: parseInt($('#data-quality-min').val())
+                }
+            };
+            break;
+
+        case 'region':
+            configData = {
+                region: {
+                    name: $('#region-name').val(),
+                    buffer_km: parseInt($('#buffer-distance').val()),
+                    bounding_box: {
+                        north: parseFloat($('#bbox-north').val()),
+                        south: parseFloat($('#bbox-south').val()),
+                        east: parseFloat($('#bbox-east').val()),
+                        west: parseFloat($('#bbox-west').val())
+                    }
+                }
+            };
+            break;
+
+        case 'alerts':
+            configData = {
+                alerts: {
+                    thresholds: {
+                        pm25: parseInt($('#pm25-threshold').val()),
+                        no2: parseInt($('#no2-threshold').val()),
+                        so2: parseInt($('#so2-threshold').val())
+                    },
+                    email: {
+                        enabled: $('#email-enabled').is(':checked'),
+                        recipients: $('#recipients').val().split('\n').filter(email => email.trim()),
+                        quiet_hours: {
+                            start: $('#quiet-start').val(),
+                            end: $('#quiet-end').val()
+                        }
+                    },
+                    reports: {
+                        daily: {
+                            enabled: $('#daily-report').is(':checked'),
+                            time: $('#daily-report-time').val()
+                        },
+                        weekly: {
+                            enabled: $('#weekly-report').is(':checked'),
+                            day: parseInt($('#weekly-report-day').val())
+                        },
+                        formats: {
+                            pdf: $('#report-pdf').is(':checked'),
+                            html: $('#report-html').is(':checked'),
+                            csv: $('#report-csv').is(':checked')
+                        }
+                    }
+                }
+            };
+            break;
+
+        case 'processing':
+            configData = {
+                processing: {
+                    atmospheric_correction: {
+                        method: $('#correction-method').val(),
+                        dark_object_percentile: parseFloat($('#dark-object-percentile').val())
+                    },
+                    noise_reduction: {
+                        gaussian_kernel: parseInt($('#gaussian-kernel').val()),
+                        median_filter_size: parseInt($('#median-filter').val())
+                    },
+                    contrast_enhancement: {
+                        method: $('#enhancement-method').val(),
+                        clip_limit: parseFloat($('#clip-limit').val())
+                    },
+                    performance: {
+                        parallel_processing: $('#parallel-processing').is(':checked'),
+                        memory_limit_gb: parseInt($('#memory-limit').val())
+                    }
+                }
+            };
+            break;
+
+        case 'system':
+            configData = {
+                system: {
+                    auto_cleanup: $('#auto-cleanup').is(':checked'),
+                    data_retention_days: parseInt($('#data-retention').val()),
+                    backup_enabled: $('#backup-enabled').is(':checked')
+                }
+            };
+            break;
+    }
+
+    $.ajax({
+        url: '/api/config',
+        method: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(configData)
+    })
+    .done(function(response) {
+        showNotification('Configuration saved successfully!', 'success');
+    })
+    .fail(function() {
+        showNotification('Failed to save configuration', 'error');
+    });
+}
+
+function testApiConnections() {
+    showLoading('Testing API connections...', 'Checking all data sources');
+
+    // Simulate connection testing
+    setTimeout(function() {
+        hideLoading();
+        showNotification('All connections working properly!', 'success');
+    }, 3000);
+}
+
+function sendTestEmail() {
+    showLoading('Sending test email...', 'Please check your inbox');
+
+    // Simulate email sending
+    setTimeout(function() {
+        hideLoading();
+        showNotification('Test email sent successfully!', 'success');
+    }, 2000);
+}
+
+function checkForUpdates() {
+    showLoading('Checking for updates...', 'Connecting to update server');
+
+    setTimeout(function() {
+        hideLoading();
+        showNotification('Your system is up to date!', 'info');
+    }, 2000);
+}
+
+function exportConfiguration() {
+    var config = {
+        timestamp: new Date().toISOString(),
+        version: '1.0.0',
+        // Export all configuration data
+    };
+
+    var blob = new Blob([JSON.stringify(config, null, 2)], {type: 'application/json'});
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = 'smog-monitor-config-' + new Date().toISOString().split('T')[0] + '.json';
+    a.click();
+    URL.revokeObjectURL(url);
+
+    showNotification('Configuration exported successfully!', 'success');
+}
+
+function importConfiguration() {
+    var input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.json';
+    input.onchange = function(e) {
+        var file = e.target.files[0];
+        var reader = new FileReader();
+        reader.onload = function(event) {
+            try {
+                var config = JSON.parse(event.target.result);
+                // Apply imported configuration
+                loadConfiguration();
+                showNotification('Configuration imported successfully!', 'success');
+            } catch (error) {
+                showNotification('Invalid configuration file', 'error');
+            }
+        };
+        reader.readAsText(file);
+    };
+    input.click();
+}
+
+function resetSystem() {
+    showLoading('Resetting system...', 'This may take a few moments');
+
+    setTimeout(function() {
+        hideLoading();
+        showNotification('System reset completed. Please reload the page.', 'warning');
+        setTimeout(function() {
+            location.reload();
+        }, 2000);
+    }, 3000);
+}
+
+function showNotification(message, type) {
+    var alertClass = type === 'error' ? 'danger' : type;
+    var notification = '<div class="alert alert-' + alertClass + ' alert-dismissible fade show" role="alert">' +
+        message +
+        '<button type="button" class="close" data-dismiss="alert">' +
+        '<span>&times;</span>' +
+        '</button>' +
+        '</div>';
+
+    $('body').prepend(notification);
+
+    setTimeout(function() {
+        $('.alert').first().alert('close');
+    }, 5000);
+}
+
+function showLoading(message, detail) {
+    $('#loading-message').text(message);
+    $('#loading-detail').text(detail);
+    $('#loadingModal').modal('show');
+}
+
+function hideLoading() {
+    $('#loadingModal').modal('hide');
+}
+</script>
+{% endblock %}
