@@ -579,8 +579,8 @@ GitHub Repository: https://github.com/TH3SOLO1ST/smog-detection
 For questions, issues, or contributions:
 
 - GitHub Issues: https://github.com/TH3SOLO1ST/smog-detection/issues
-- Email: [excel3227@gmail.com]
-- Project Lead: [excel3227@gmail.com]
+- Email: excel3227@gmail.com
+- Project Lead: excel3227@gmail.com
 
 ---
 
