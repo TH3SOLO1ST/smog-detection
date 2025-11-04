@@ -1,0 +1,660 @@
+/* Islamabad Smog Detection System - Custom Styles */
+
+/* Global Styles */
+:root {
+    --primary-color: #007bff;
+    --secondary-color: #6c757d;
+    --success-color: #28a745;
+    --warning-color: #ffc107;
+    --danger-color: #dc3545;
+    --info-color: #17a2b2;
+    --light-color: #f8f9fa;
+    --dark-color: #343a40;
+
+    /* Air quality status colors */
+    --aqi-good: #00e400;
+    --aqi-moderate: #ffff00;
+    --aqi-unhealthy-sensitive: #ff7e00;
+    --aqi-unhealthy: #ff0000;
+    --aqi-very-unhealthy: #8f3f97;
+    --aqi-hazardous: #7e0023;
+
+    /* Custom spacing */
+    --sidebar-width: 280px;
+    --header-height: 60px;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f8f9fa;
+    line-height: 1.6;
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 600;
+    color: var(--dark-color);
+}
+
+h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+h2 {
+    font-size: 2rem;
+    margin-bottom: 0.8rem;
+}
+
+h3 {
+    font-size: 1.75rem;
+    margin-bottom: 0.6rem;
+}
+
+/* Navigation */
+.navbar {
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+}
+
+.navbar-brand {
+    font-weight: 700;
+    font-size: 1.5rem;
+}
+
+.navbar-nav .nav-link {
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.navbar-nav .nav-link:hover {
+    transform: translateY(-1px);
+}
+
+/* Cards */
+.card {
+    border: none;
+    border-radius: 15px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    overflow: hidden;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.card-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    font-weight: 600;
+    padding: 1rem 1.5rem;
+}
+
+/* Buttons */
+.btn {
+    border-radius: 25px;
+    font-weight: 500;
+    padding: 0.5rem 1.5rem;
+    transition: all 0.3s ease;
+    border: none;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.btn-success {
+    background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+}
+
+.btn-warning {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+}
+
+.btn-danger {
+    background: linear-gradient(135deg, #eb3349 0%, #f45c43 100%);
+}
+
+.btn-info {
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+}
+
+/* Air Quality Status Badges */
+.aqi-badge {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 1.1rem;
+    text-align: center;
+    color: white;
+    margin: 0.5rem;
+    transition: all 0.3s ease;
+}
+
+.aqi-badge:hover {
+    transform: scale(1.05);
+}
+
+.aqi-good {
+    background-color: var(--aqi-good);
+    color: #000;
+}
+
+.aqi-moderate {
+    background-color: var(--aqi-moderate);
+    color: #000;
+}
+
+.aqi-unhealthy-sensitive {
+    background-color: var(--aqi-unhealthy-sensitive);
+}
+
+.aqi-unhealthy {
+    background-color: var(--aqi-unhealthy);
+}
+
+.aqi-very-unhealthy {
+    background-color: var(--aqi-very-unhealthy);
+}
+
+.aqi-hazardous {
+    background-color: var(--aqi-hazardous);
+}
+
+/* Pollutant Cards */
+.pollutant-card {
+    background: white;
+    border-radius: 15px;
+    padding: 1.5rem;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    border-left: 4px solid var(--primary-color);
+}
+
+.pollutant-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.pollutant-value {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--dark-color);
+    margin: 0.5rem 0;
+}
+
+.pollutant-unit {
+    font-size: 0.9rem;
+    color: var(--secondary-color);
+    margin-bottom: 0.5rem;
+}
+
+.pollutant-status {
+    font-size: 0.85rem;
+    font-weight: 500;
+    padding: 0.25rem 0.75rem;
+    border-radius: 15px;
+    background-color: var(--light-color);
+}
+
+/* Charts */
+.chart-container {
+    background: white;
+    border-radius: 15px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-bottom: 2rem;
+}
+
+/* Map */
+#map-container {
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Loading Spinner */
+.loading-spinner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 200px;
+}
+
+.spinner-border {
+    width: 3rem;
+    height: 3rem;
+    border-width: 0.3rem;
+}
+
+/* Alerts */
+.alert {
+    border-radius: 15px;
+    border: none;
+    padding: 1rem 1.5rem;
+    margin-bottom: 1rem;
+    animation: slideInDown 0.5s ease;
+}
+
+@keyframes slideInDown {
+    from {
+        transform: translateY(-100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Forms */
+.form-control {
+    border-radius: 10px;
+    border: 2px solid #e9ecef;
+    padding: 0.75rem 1rem;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+}
+
+.form-group label {
+    font-weight: 600;
+    color: var(--dark-color);
+    margin-bottom: 0.5rem;
+}
+
+/* Tables */
+.table {
+    background: white;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.table th {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    font-weight: 600;
+}
+
+.table td {
+    border-color: #f1f3f4;
+    vertical-align: middle;
+}
+
+/* Custom Switch */
+.custom-control-input:checked ~ .custom-control-label::before {
+    background-color: var(--success-color);
+    border-color: var(--success-color);
+}
+
+/* Range Sliders */
+.form-control-range {
+    width: 100%;
+    height: 8px;
+    border-radius: 5px;
+    background: linear-gradient(to right, var(--primary-color) 0%, var(--primary-color) var(--value, 50%), #e9ecef var(--value, 50%), #e9ecef 100%);
+}
+
+/* Progress Bars */
+.progress {
+    height: 1rem;
+    border-radius: 50px;
+    background-color: #e9ecef;
+}
+
+.progress-bar {
+    border-radius: 50px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+/* Tooltips */
+.tooltip-inner {
+    background-color: var(--dark-color);
+    border-radius: 8px;
+    padding: 0.5rem 1rem;
+}
+
+/* Footer */
+footer {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    margin-top: 3rem;
+}
+
+/* Mobile Responsive Design */
+@media (max-width: 768px) {
+    /* Adjust typography for mobile */
+    h1 {
+        font-size: 2rem;
+    }
+
+    h2 {
+        font-size: 1.5rem;
+    }
+
+    h3 {
+        font-size: 1.25rem;
+    }
+
+    /* Cards on mobile */
+    .card {
+        margin-bottom: 1rem;
+        border-radius: 10px;
+    }
+
+    .card-header {
+        padding: 0.75rem 1rem;
+    }
+
+    /* Buttons on mobile */
+    .btn {
+        padding: 0.75rem 1.25rem;
+        font-size: 0.9rem;
+        margin-bottom: 0.5rem;
+        width: 100%;
+    }
+
+    .btn-group .btn {
+        width: auto;
+        margin-bottom: 0;
+    }
+
+    /* Pollutant cards on mobile */
+    .pollutant-card {
+        margin-bottom: 1rem;
+        padding: 1rem;
+    }
+
+    .pollutant-value {
+        font-size: 1.5rem;
+    }
+
+    /* AQI badges on mobile */
+    .aqi-badge {
+        padding: 0.5rem 1rem;
+        font-size: 1rem;
+        margin: 0.25rem;
+    }
+
+    /* Navigation on mobile */
+    .navbar-nav {
+        text-align: center;
+    }
+
+    .navbar-nav .nav-item {
+        margin-bottom: 0.5rem;
+    }
+
+    /* Tables on mobile */
+    .table {
+        font-size: 0.9rem;
+    }
+
+    .table th,
+    .table td {
+        padding: 0.5rem;
+    }
+
+    /* Forms on mobile */
+    .form-control {
+        font-size: 16px; /* Prevent zoom on iOS */
+    }
+
+    /* Charts on mobile */
+    .chart-container {
+        padding: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    /* Map on mobile */
+    #map-container {
+        height: 300px !important;
+    }
+
+    /* Alerts on mobile */
+    .alert {
+        padding: 0.75rem 1rem;
+        font-size: 0.9rem;
+    }
+
+    /* Footer on mobile */
+    footer {
+        text-align: center;
+    }
+
+    /* Configuration forms */
+    .custom-control {
+        margin-bottom: 1rem;
+    }
+
+    .input-group {
+        flex-direction: column;
+    }
+
+    .input-group .form-control {
+        border-radius: 10px !important;
+        margin-bottom: 0.5rem;
+    }
+
+    .input-group-append {
+        margin-left: 0;
+    }
+
+    /* Modal adjustments */
+    .modal-dialog {
+        margin: 1rem;
+    }
+
+    .modal-body {
+        padding: 1rem;
+    }
+}
+
+@media (max-width: 576px) {
+    /* Extra small screens */
+    .container-fluid {
+        padding-left: 0.5rem;
+        padding-right: 0.5rem;
+    }
+
+    .card-body {
+        padding: 1rem;
+    }
+
+    .btn {
+        font-size: 0.85rem;
+        padding: 0.5rem 1rem;
+    }
+
+    .pollutant-card {
+        padding: 0.75rem;
+    }
+
+    .pollutant-value {
+        font-size: 1.25rem;
+    }
+
+    h1 {
+        font-size: 1.75rem;
+    }
+
+    h2 {
+        font-size: 1.25rem;
+    }
+
+    .table {
+        font-size: 0.8rem;
+    }
+
+    #map-container {
+        height: 250px !important;
+    }
+}
+
+/* Tablet adjustments */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .pollutant-card {
+        margin-bottom: 1rem;
+    }
+
+    .btn {
+        margin-bottom: 0.5rem;
+    }
+
+    #map-container {
+        height: 400px !important;
+    }
+}
+
+/* Large screens */
+@media (min-width: 1200px) {
+    .container {
+        max-width: 1400px;
+    }
+
+    #map-container {
+        height: 600px !important;
+    }
+}
+
+/* Print styles */
+@media print {
+    .navbar,
+    .btn,
+    .modal,
+    .alert-dismissible .close {
+        display: none !important;
+    }
+
+    .card {
+        box-shadow: none;
+        border: 1px solid #dee2e6;
+        page-break-inside: avoid;
+    }
+
+    .table {
+        page-break-inside: avoid;
+    }
+
+    body {
+        font-size: 12pt;
+        line-height: 1.4;
+    }
+}
+
+/* Accessibility improvements */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+    .card {
+        border: 2px solid var(--dark-color);
+    }
+
+    .btn {
+        border: 2px solid currentColor;
+    }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+    body {
+        background-color: #1a1a1a;
+        color: #e0e0e0;
+    }
+
+    .card {
+        background-color: #2d2d2d;
+        color: #e0e0e0;
+    }
+
+    .form-control {
+        background-color: #2d2d2d;
+        border-color: #444;
+        color: #e0e0e0;
+    }
+
+    .table {
+        background-color: #2d2d2d;
+        color: #e0e0e0;
+    }
+
+    .chart-container {
+        background-color: #2d2d2d;
+    }
+}
+
+/* Loading animations */
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.loading-content {
+    background: white;
+    padding: 2rem;
+    border-radius: 15px;
+    text-align: center;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+/* Smooth scrolling */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Focus styles for accessibility */
+.btn:focus,
+.form-control:focus,
+.nav-link:focus {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
+/* Custom scrollbar for webkit browsers */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
+}
