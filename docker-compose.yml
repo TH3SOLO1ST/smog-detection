@@ -1,0 +1,109 @@
+version: '3.8'
+
+services:
+  # Main Smog Detection Application
+  smog-monitor:
+    build: .
+    container_name: islamabad-smog-monitor
+    ports:
+      - "5000:5000"
+    environment:
+      - FLASK_ENV=production
+      - REDIS_URL=redis://redis:6379/0
+      - DATABASE_URL=sqlite:///app/data/smog_system.db
+    volumes:
+      - ./data:/app/data
+      - ./config.yaml:/app/config.yaml
+      - ./logs:/app/logs
+    depends_on:
+      - redis
+    restart: unless-stopped
+    networks:
+      - smog-network
+
+  # Redis for caching and task queue
+  redis:
+    image: redis:7-alpine
+    container_name: smog-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    restart: unless-stopped
+    networks:
+      - smog-network
+
+  # Celery worker for background tasks
+  celery-worker:
+    build: .
+    container_name: smog-celery-worker
+    command: celery -A src.web_interface.celery_app worker --loglevel=info
+    environment:
+      - REDIS_URL=redis://redis:6379/0
+    volumes:
+      - ./data:/app/data
+      - ./config.yaml:/app/config.yaml
+      - ./logs:/app/logs
+    depends_on:
+      - redis
+    restart: unless-stopped
+    networks:
+      - smog-network
+
+  # Celery beat for scheduled tasks
+  celery-beat:
+    build: .
+    container_name: smog-celery-beat
+    command: celery -A src.web_interface.celery_app beat --loglevel=info
+    environment:
+      - REDIS_URL=redis://redis:6379/0
+    volumes:
+      - ./data:/app/data
+      - ./config.yaml:/app/config.yaml
+      - ./logs:/app/logs
+    depends_on:
+      - redis
+    restart: unless-stopped
+    networks:
+      - smog-network
+
+  # Nginx reverse proxy (optional)
+  nginx:
+    image: nginx:alpine
+    container_name: smog-nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+      - ./ssl:/etc/nginx/ssl
+    depends_on:
+      - smog-monitor
+    restart: unless-stopped
+    networks:
+      - smog-network
+
+  # Jupyter Lab for advanced analysis
+  jupyter:
+    build: .
+    container_name: smog-jupyter
+    command: jupyter lab --ip=0.0.0.0 --port=8888 --no-browser --allow-root --NotebookApp.token=''
+    ports:
+      - "8888:8888"
+    volumes:
+      - ./notebooks:/app/notebooks
+      - ./data:/app/data
+      - ./src:/app/src
+    environment:
+      - JUPYTER_ENABLE_LAB=yes
+    restart: unless-stopped
+    networks:
+      - smog-network
+
+volumes:
+  redis_data:
+    driver: local
+
+networks:
+  smog-network:
+    driver: bridge
